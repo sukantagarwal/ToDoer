@@ -7,3 +7,4 @@ Tech details:-
 3. Entity Framework Core
 4. Command Query Responsibility Segregation (CQRS) pattern
 5. XUnit Unit tests with Moq mocking
+6. Docker for containerization
