@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: ToDo API
+  version: '1.0'
+components:
+  schemas:
+    ToDoListCollection:
+      type: object
+      properties:
+        ToDoLists:
+          type: array
+          items:
+            $ref: "#/components/schemas/ToDoList"
+    ToDoList:
+      type: object
+      properties:
+        Guid:
+          type: string
+          format: Guid
+        Name:
+          type: string
+        CreateDate:
+          type: string
+          format: date-time
+    ListDetails:
+      type: object
+      description: "Either Name or Guid or both can be entered"
+      properties:
+        Name:
+          type: string
+        Guid:
+          type: string
+          format: Guid
+      example:
+        Name: "Today's list"
+  parameters:
+    TaskName:
+      name: TaskName
+      in: path
+      required: true
+      description: "Name of the task list"
+      schema:
+        type: string
+    ToDoListId:
+      name: ToDoListId
+      in: path
+      required: true
+      description: "Id of the task list"
+      schema:
+        type: string
+    ListDetails:
+      name: ListDetails
+      in: query
+      required: true
+      schema:
+        $ref: "#/components/schemas/ListDetails"
+paths:
+  /ToDoList/UpdateToDoList:
+    patch:
+      parameters:
+        - $ref: "#/components/parameters/ListDetails"
+      tags:
+        - "ToDoList"
+      description: "Update a task list - The query parameter input can be either name of the list or guid of the list or both. The request body should contain the new name of the list"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoList"
+        '404':
+          description: NotFound
+        '401':
+          description: Bad Request          
+  /ToDoList/{TaskName}:
+    post:
+      tags:
+        - "ToDoList"
+      description: "Create a new task list"
+      parameters:
+        - $ref: "#/components/parameters/TaskName"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoList"
+        '404':
+          description: NotFound
+        '401':
+          description: Bad Request          
+  /ToDoList:
+    get:
+      tags:
+        - "ToDoList"
+      description: "Returns all task lists"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoListCollection"
+        '404':
+          description: Not Found
+        '401':
+          description: Bad Request
+  /ToDoList/DeleteList:
+    delete:
+      parameters:
+        - $ref: "#/components/parameters/ListDetails"
+      tags:
+        - "ToDoList"
+      description: "Delete a task list"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoList"
+        '404':
+          description: NotFound
+        '401':
+          description: Bad Request
+  /ToDoList/List:
+    get:
+      parameters:
+        - $ref: "#/components/parameters/ListDetails"
+      description: "Get a task list"
+      tags:
+        - "ToDoList"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToDoList"
+        '404':
+          description: NotFound
+        '401':
+          description: Bad Request          
+
+
